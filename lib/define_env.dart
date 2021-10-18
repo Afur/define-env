@@ -1,6 +1,7 @@
 library define_env;
 
 export 'src/clipboard.dart';
+export 'src/config_writer/config_writer.dart';
 export 'src/config_writer/android_studio_config_writer.dart';
 export 'src/config_writer/vscode_config_writer.dart';
 export 'src/define_env.dart';
