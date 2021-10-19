@@ -35,19 +35,33 @@ class VscodeConfigWriter extends ConfigWriter {
     /// At this point however we cannot preserve these comments.
     fileContent = fileContent.replaceAll(RegExp('.+//.+\n'), "");
 
-    var configJson = jsonDecode(fileContent);
+    var configJson = jsonDecode(fileContent) as Map<String, dynamic>;
 
-    var configList = (configJson['configurations'] as Iterable);
+    var configList =
+        new List<Map<String, dynamic>>.from(configJson["configurations"]);
 
-    if (configName != null) {
-      configList = configList.where((config) => config['name'] == configName);
+    final dartDefineList = getDartDefineList();
+
+    if (configList.any((config) => config["name"] == configName)) {
+      final config = configList.firstWhere((config) => config["name"] == configName);
+
+      final updatedConfig = updateConfig(config, dartDefineList);
+      configList[
+              configList.indexWhere((config) => config['name'] == configName)] =
+          updatedConfig;
+    } else {
+      final Map<String, dynamic> config = {
+        "name": configName,
+        "request": "launch",
+        "type": "dart",
+        "toolArgs": [],
+      };
+
+      final updatedConfig = updateConfig(config, dartDefineList);
+      configList.add(updatedConfig);
     }
 
-    var dartDefineList = getDartDefineList();
-
-    configJson['configurations'] =
-        configList.map((configMap) => updateConfig(configMap, dartDefineList));
-
+    configJson["configurations"] = configList;
     return prettifyJson(configJson);
   }
 
@@ -56,11 +70,15 @@ class VscodeConfigWriter extends ConfigWriter {
     Map<String, dynamic> config,
     Iterable<String> dartDefineList,
   ) {
-    return config.update(
-      'args',
-      (value) => getNonDartDefineArguments(value).followedBy(dartDefineList),
-      ifAbsent: () => dartDefineList,
-    );
+    if (config.containsKey("toolArgs")) {
+      config["toolArgs"] = getNonDartDefineArguments(config["toolArgs"])
+          .followedBy(dartDefineList)
+          .toList();
+      return config;
+    } else {
+      config["toolArgs"] = dartDefineList;
+      return config;
+    }
   }
 
   /// Pretty Print [json]
@@ -93,8 +111,9 @@ class VscodeConfigWriter extends ConfigWriter {
   }
 
   /// Splits the dart-define string into a list format as required by VS Code.
-  Iterable<String> getDartDefineList() {
+  List<String> getDartDefineList() {
     return (dartDefineString.split("--dart-define=")..removeAt(0))
-        .expand((element) => ["--dart-define", element.trim()]);
+        .expand((element) => ["--dart-define", element.trim()])
+        .toList();
   }
 }
