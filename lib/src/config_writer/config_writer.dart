@@ -27,6 +27,7 @@ abstract class ConfigWriter {
       ..addAll(mandatoryFiles)
       ..addAll(getOptionalFilesToUpdate())
       ..forEach((file) {
+        final configContent = writeConfig(file.readAsStringSync());
         file.writeAsStringSync(writeConfig(file.readAsStringSync()));
       });
   }
