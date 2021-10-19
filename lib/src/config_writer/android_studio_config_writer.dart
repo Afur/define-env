@@ -28,7 +28,8 @@ class AndroidStudioConfigWriter extends ConfigWriter {
   @override
   List<File> getOptionalFilesToUpdate() {
     var workspaceFilePath = projectPath + "/.idea/workspace.xml";
-    var runDirectoryPath = projectPath + "/.run";
+    
+    /*var runDirectoryPath = projectPath + "/.run";
     var runDirectory = Directory(runDirectoryPath);
     var filesToUpdate = runDirectory
         .listSync()
@@ -36,8 +37,8 @@ class AndroidStudioConfigWriter extends ConfigWriter {
         .map((element) => File(element.uri.toString()))
         .toList();
 
-    filesToUpdate.add(File(workspaceFilePath));
-    return filesToUpdate;
+    filesToUpdate.add(File(workspaceFilePath));*/
+    return [File(workspaceFilePath)];
   }
 
   @override
