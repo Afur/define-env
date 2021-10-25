@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:define_env/src/config_writer/config_writer.dart';
-import 'package:xml/xml.dart';
+import 'package:xml_parser/xml_parser.dart';
 
 /// [ConfigWriter] for Android Studio and Intellij IDEs.
 ///
@@ -28,7 +28,7 @@ class AndroidStudioConfigWriter extends ConfigWriter {
   @override
   List<File> getOptionalFilesToUpdate() {
     var workspaceFilePath = projectPath + "/.idea/workspace.xml";
-    
+
     /*var runDirectoryPath = projectPath + "/.run";
     var runDirectory = Directory(runDirectoryPath);
     var filesToUpdate = runDirectory
@@ -43,33 +43,96 @@ class AndroidStudioConfigWriter extends ConfigWriter {
 
   @override
   String writeConfig(String configXmlString) {
-    var configXml = XmlDocument.parse(configXmlString);
+    var xmlDocument = XmlDocument.from(configXmlString);
+    final project = xmlDocument?.getChildWhere(name: "project");
 
-    var flutterConfigElements = configXml
-        .findAllElements('configuration')
-        .where(isXmlElementFlutterConfig);
+    final runManager = project?.getChildWhere(
+        name: "component",
+        attributes: [XmlAttribute("name", "RunManager")],
+        matchAllAttributes: true);
+    final configurations = runManager?.getChildrenWhere(name: "configuration") ?? [];
 
-    if (configName != null) {
-      flutterConfigElements =
-          flutterConfigElements.where(isXmlElementSameAsConfig);
+    final configurationIndex = configurations.indexWhere(
+      (element) => element.attributes!.contains(
+        XmlAttribute("name", "main.dart" ?? ""),
+      ),
+    );
+
+    if(configurationIndex == -1) {
+      //configurations.add(configurations.first.copyWith(a));
     }
 
-    flutterConfigElements.forEach(updateAndroidStudioConfiguration);
+    return "";
+    /*var flutterConfigElements = configXml
+        .findAllElements('configuration')
+        .where(isXmlElementFlutterConfig)
+        .toList();
 
-    return configXml.toXmlString();
+    if (configName != null &&
+        flutterConfigElements.contains(isXmlElementSameAsConfig)) {
+      flutterConfigElements =
+          flutterConfigElements.where(isXmlElementSameAsConfig).toList();
+    }
+
+    flutterConfigElements.forEach((element) {
+      final options = element
+          .findAllElements('option')
+          .where(elementHasArgs)
+          .toList();
+
+      if (options.isEmpty) {
+        options.add(
+          XmlElement(
+            XmlName("option"),
+          )
+            ..setAttribute(
+              "name",
+              "additionalArgs",
+            )
+            ..setAttribute(
+              "value",
+              "",
+            ),
+        );
+      }
+
+      options.forEach(updateElement);
+    });
+
+
+    return configXml.toXmlString();*/
   }
 
-  bool isXmlElementFlutterConfig(XmlElement element) =>
+  /*bool isXmlElementFlutterConfig(XmlElement element) =>
       element.getAttribute('type') == 'FlutterRunConfigurationType';
 
   bool isXmlElementSameAsConfig(XmlElement element) =>
       element.getAttribute('name') == configName;
 
-  void updateAndroidStudioConfiguration(XmlElement configurationNode) =>
-      configurationNode
-          .findAllElements('option')
-          .where(elementHasArgs)
-          .forEach(updateElement);
+  void updateAndroidStudioConfiguration(XmlElement configurationNode) {
+    final options = configurationNode
+        .findAllElements('option')
+        .where(elementHasArgs)
+        .toList();
+
+    if (options.isEmpty) {
+      options.add(
+        XmlElement(
+          XmlName("option"),
+        )
+          ..setAttribute(
+            "name",
+            "additionalArgs",
+          )
+          ..setAttribute(
+            "value",
+            "",
+          ),
+      );
+    }
+
+    options.forEach(updateElement);
+  }
 
   /// Checks if [element] has 'additionalArgs'. We should ideally check for 'attachArgs' too I suppose.
   bool elementHasArgs(XmlElement element) =>
@@ -88,7 +151,7 @@ class AndroidStudioConfigWriter extends ConfigWriter {
       /// because of the extra spaces
       (retainedArgs + " " + dartDefineString).trim(),
     );
-  }
+  }*/
 
   /// Remove all dart-defines from [oldArguments] and return whatever is remaining.
   String getRetainedArgs(String oldArguments) {
