@@ -43,12 +43,15 @@ class VscodeConfigWriter extends ConfigWriter {
     final dartDefineList = getDartDefineList();
 
     if (configList.any((config) => config["name"] == configName)) {
-      final config = configList.firstWhere((config) => config["name"] == configName);
+      final config =
+          configList.firstWhere((config) => config["name"] == configName);
 
-      final updatedConfig = updateConfig(config, dartDefineList);
+      final updatedConfigWithDartDefine = updateConfig(config, dartDefineList);
+      final updatedConfigWithProgram =
+          updateProgram(updatedConfigWithDartDefine, startupFilePath);
       configList[
               configList.indexWhere((config) => config['name'] == configName)] =
-          updatedConfig;
+          updatedConfigWithProgram;
     } else {
       final Map<String, dynamic> config = {
         "name": configName,
@@ -57,8 +60,10 @@ class VscodeConfigWriter extends ConfigWriter {
         "toolArgs": [],
       };
 
-      final updatedConfig = updateConfig(config, dartDefineList);
-      configList.add(updatedConfig);
+      final updatedConfigWithDartDefine = updateConfig(config, dartDefineList);
+      final updatedConfigWithProgram =
+          updateProgram(updatedConfigWithDartDefine, startupFilePath);
+      configList.add(updatedConfigWithProgram);
     }
 
     configJson["configurations"] = configList;
@@ -79,6 +84,24 @@ class VscodeConfigWriter extends ConfigWriter {
       config["toolArgs"] = dartDefineList;
       return config;
     }
+  }
+
+  /// Update a single VS Code [config] with [program] property.
+  Map<String, dynamic> updateProgram(
+    Map<String, dynamic> config,
+    String? startupFilePath,
+  ) {
+    if (config.containsKey("program")) {
+      if (startupFilePath != null) {
+        config["program"] = "lib/" + startupFilePath;
+      }
+    } else {
+      if (startupFilePath != null) {
+        config["program"] = "lib/" + startupFilePath;
+      }
+    }
+
+    return config;
   }
 
   /// Pretty Print [json]

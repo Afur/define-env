@@ -6,11 +6,13 @@ abstract class ConfigWriter {
   final String projectPath;
   final String dartDefineString;
   final String? configName;
+  final String? startupFilePath;
 
   ConfigWriter({
     required this.projectPath,
     required this.dartDefineString,
     required this.configName,
+    this.startupFilePath,
   });
 
   List<File> getOptionalFilesToUpdate();
@@ -28,6 +30,7 @@ abstract class ConfigWriter {
       ..addAll(getOptionalFilesToUpdate())
       ..forEach((file) {
         final configContent = writeConfig(file.readAsStringSync());
+        final configuration = writeConfig('configurations');
         file.writeAsStringSync(writeConfig(file.readAsStringSync()));
       });
   }
