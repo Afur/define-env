@@ -13,3 +13,7 @@ export 'src/settings/entities/env_settings.dart';
 export 'src/settings/entities/field_env_settings.dart';
 export 'src/settings/entities/field_type_env_settings.dart';
 export 'src/settings/load_env_settings.dart';
+export 'src/config_reader/config_reader.dart';
+export 'src/config_reader/android_studio_config_reader.dart';
+export 'src/config_reader/vscode_config_reader.dart';
+export 'src/model/configuration.dart';
