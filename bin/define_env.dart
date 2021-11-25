@@ -52,6 +52,11 @@ final _argPsr = ArgParser()
     defaultsTo: true,
     help:
         'Generate dart code to read environment variables from yaml file settings.',
+  )
+  ..addFlag(
+    'auto-config-name',
+    defaultsTo: false,
+    help: 'Use config name based on file name',
   );
 
 void main(List<String> argv) {
@@ -84,7 +89,8 @@ void main(List<String> argv) {
   if (opts['vscode']) {
     VscodeConfigWriter(
       dartDefineString: dartDefineString,
-      configName: opts['config-name'],
+      configName:
+          opts['auto-config-name'] ? opts['config-name'] : opts['config-name'],
       projectPath: '.',
     ).call();
   }
@@ -109,6 +115,8 @@ void copyToPlatformClipboard(String dartDefineString) {
     Console.write('\tCould not copied to clipboard: $error\t\n');
   });
 }
+
+String configNameFromFile(String file) => file.split('.').last;
 
 void _usage() =>
     print('\nUsage: pub global run define_env \n\n${_argPsr.usage}\n');
