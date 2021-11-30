@@ -17,9 +17,13 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ConfigurationTearOff {
   const _$ConfigurationTearOff();
 
-  _Configuration call({required String name, required String startupFilePath}) {
+  _Configuration call(
+      {required String name,
+      String? sourceFilePath,
+      required String startupFilePath}) {
     return _Configuration(
       name: name,
+      sourceFilePath: sourceFilePath,
       startupFilePath: startupFilePath,
     );
   }
@@ -31,6 +35,7 @@ const $Configuration = _$ConfigurationTearOff();
 /// @nodoc
 mixin _$Configuration {
   String get name => throw _privateConstructorUsedError;
+  String? get sourceFilePath => throw _privateConstructorUsedError;
   String get startupFilePath => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -43,7 +48,7 @@ abstract class $ConfigurationCopyWith<$Res> {
   factory $ConfigurationCopyWith(
           Configuration value, $Res Function(Configuration) then) =
       _$ConfigurationCopyWithImpl<$Res>;
-  $Res call({String name, String startupFilePath});
+  $Res call({String name, String? sourceFilePath, String startupFilePath});
 }
 
 /// @nodoc
@@ -58,6 +63,7 @@ class _$ConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? sourceFilePath = freezed,
     Object? startupFilePath = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +71,10 @@ class _$ConfigurationCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      sourceFilePath: sourceFilePath == freezed
+          ? _value.sourceFilePath
+          : sourceFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
       startupFilePath: startupFilePath == freezed
           ? _value.startupFilePath
           : startupFilePath // ignore: cast_nullable_to_non_nullable
@@ -80,7 +90,7 @@ abstract class _$ConfigurationCopyWith<$Res>
           _Configuration value, $Res Function(_Configuration) then) =
       __$ConfigurationCopyWithImpl<$Res>;
   @override
-  $Res call({String name, String startupFilePath});
+  $Res call({String name, String? sourceFilePath, String startupFilePath});
 }
 
 /// @nodoc
@@ -97,6 +107,7 @@ class __$ConfigurationCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? sourceFilePath = freezed,
     Object? startupFilePath = freezed,
   }) {
     return _then(_Configuration(
@@ -104,6 +115,10 @@ class __$ConfigurationCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      sourceFilePath: sourceFilePath == freezed
+          ? _value.sourceFilePath
+          : sourceFilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
       startupFilePath: startupFilePath == freezed
           ? _value.startupFilePath
           : startupFilePath // ignore: cast_nullable_to_non_nullable
@@ -115,16 +130,19 @@ class __$ConfigurationCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Configuration implements _Configuration {
-  _$_Configuration({required this.name, required this.startupFilePath});
+  _$_Configuration(
+      {required this.name, this.sourceFilePath, required this.startupFilePath});
 
   @override
   final String name;
+  @override
+  final String? sourceFilePath;
   @override
   final String startupFilePath;
 
   @override
   String toString() {
-    return 'Configuration(name: $name, startupFilePath: $startupFilePath)';
+    return 'Configuration(name: $name, sourceFilePath: $sourceFilePath, startupFilePath: $startupFilePath)';
   }
 
   @override
@@ -133,6 +151,9 @@ class _$_Configuration implements _Configuration {
         (other is _Configuration &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
+            (identical(other.sourceFilePath, sourceFilePath) ||
+                const DeepCollectionEquality()
+                    .equals(other.sourceFilePath, sourceFilePath)) &&
             (identical(other.startupFilePath, startupFilePath) ||
                 const DeepCollectionEquality()
                     .equals(other.startupFilePath, startupFilePath)));
@@ -142,6 +163,7 @@ class _$_Configuration implements _Configuration {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(name) ^
+      const DeepCollectionEquality().hash(sourceFilePath) ^
       const DeepCollectionEquality().hash(startupFilePath);
 
   @JsonKey(ignore: true)
@@ -153,10 +175,13 @@ class _$_Configuration implements _Configuration {
 abstract class _Configuration implements Configuration {
   factory _Configuration(
       {required String name,
+      String? sourceFilePath,
       required String startupFilePath}) = _$_Configuration;
 
   @override
   String get name => throw _privateConstructorUsedError;
+  @override
+  String? get sourceFilePath => throw _privateConstructorUsedError;
   @override
   String get startupFilePath => throw _privateConstructorUsedError;
   @override

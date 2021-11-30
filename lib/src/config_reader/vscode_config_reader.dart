@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:define_env/src/config_reader/config_reader.dart';
 import 'package:define_env/src/model/configuration.dart';
 
-class VscodeConfigConfigReader extends ConfigReader {
-  VscodeConfigConfigReader({
+class VscodeConfigReader extends ConfigReader {
+  VscodeConfigReader({
     required String projectPath,
   }) : super(
           projectPath: projectPath,

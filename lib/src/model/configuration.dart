@@ -6,6 +6,7 @@ part 'configuration.freezed.dart';
 class Configuration with _$Configuration {
   factory Configuration({
     required String name,
+    String? sourceFilePath,
     required String startupFilePath,
   }) = _Configuration;
 }
