@@ -17,3 +17,4 @@ export 'src/config_reader/config_reader.dart';
 export 'src/config_reader/android_studio_config_reader.dart';
 export 'src/config_reader/vscode_config_reader.dart';
 export 'src/model/configuration.dart';
+export 'src/model/platform.dart';
