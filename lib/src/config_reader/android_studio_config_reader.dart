@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:define_env/src/config_reader/config_reader.dart';
-import 'package:define_env/src/config_writer/config_writer.dart';
 import 'package:define_env/src/model/configuration.dart';
+import 'package:define_env/src/model/platform.dart';
 import 'package:xml/xml.dart';
-import 'package:collection/collection.dart';
 
 class AndroidStudioConfigReader extends ConfigReader {
   AndroidStudioConfigReader({
@@ -50,13 +49,14 @@ class AndroidStudioConfigReader extends ConfigReader {
       );
 
       final filePath = optionWithFilePath.attributes
-          .firstWhere((attribute) => attribute.value == "filePath")
+          .firstWhere((attribute) => attribute.name == XmlName("value"))
           .value;
 
       final startupFilePath = filePath.split("lib/").last;
 
       return Configuration(
         name: configurationName,
+        platform: Platform.androidStudio,
         startupFilePath: startupFilePath,
       );
     }).toList();

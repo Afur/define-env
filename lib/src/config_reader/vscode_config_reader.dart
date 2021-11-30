@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:define_env/src/config_reader/config_reader.dart';
 import 'package:define_env/src/model/configuration.dart';
+import 'package:define_env/src/model/platform.dart';
 
 class VscodeConfigReader extends ConfigReader {
   VscodeConfigReader({
@@ -30,6 +31,7 @@ class VscodeConfigReader extends ConfigReader {
 
       return Configuration(
         name: name,
+        platform: Platform.vsCode,
         startupFilePath: startupFilePath,
       );
     }).toList();
