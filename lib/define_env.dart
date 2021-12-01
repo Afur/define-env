@@ -16,5 +16,8 @@ export 'src/settings/load_env_settings.dart';
 export 'src/config_reader/config_reader.dart';
 export 'src/config_reader/android_studio_config_reader.dart';
 export 'src/config_reader/vscode_config_reader.dart';
+export 'src/config_remover/config_remover.dart';
+export 'src/config_remover/android_studio_config_remover.dart';
+export 'src/config_remover/vscode_config_remover.dart';
 export 'src/model/configuration.dart';
 export 'src/model/platform.dart';

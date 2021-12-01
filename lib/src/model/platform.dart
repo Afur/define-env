@@ -1,4 +1,7 @@
 import 'package:define_env/define_env.dart';
+import 'package:define_env/src/config_remover/android_studio_config_remover.dart';
+import 'package:define_env/src/config_remover/config_remover.dart';
+import 'package:define_env/src/config_remover/vscode_config_remover.dart';
 
 import 'package:define_env/src/config_writer/config_writer.dart';
 
@@ -43,6 +46,24 @@ extension PlatformExt on Platform {
           dartDefineString: dartDefineString,
           configName: configName,
           startupFilePath: startupFilePath,
+        );
+    }
+  }
+
+  ConfigRemover configRemover({
+    required String projectPath,
+    required String configName,
+  }) {
+    switch (this) {
+      case Platform.androidStudio:
+        return AndroidStudioConfigRemover(
+          projectPath: projectPath,
+          configName: configName,
+        );
+      case Platform.vsCode:
+        return VscodeStudioConfigRemover(
+          projectPath: projectPath,
+          configName: configName,
         );
     }
   }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:io';
 
 import 'package:define_env/src/config_writer/config_writer.dart';
 import 'package:xml/xml.dart';
@@ -25,13 +26,7 @@ class AndroidStudioConfigWriter extends ConfigWriter {
         );
 
   @override
-  List<File> getMandatoryFilesToUpdate() => [];
-
-  @override
-  List<File> getOptionalFilesToUpdate() {
-    var workspaceFilePath = projectPath + "/.idea/workspace.xml";
-    return [File(workspaceFilePath)];
-  }
+  File getFileToUpdate() => File(projectPath + "/.idea/workspace.xml");
 
   @override
   String writeConfig(String configXmlString) {

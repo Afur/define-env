@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:define_env/define_env.dart';
-
 abstract class ConfigWriter {
   final String projectPath;
   final String dartDefineString;
@@ -15,21 +13,19 @@ abstract class ConfigWriter {
     this.startupFilePath,
   });
 
-  List<File> getOptionalFilesToUpdate();
-
-  List<File> getMandatoryFilesToUpdate();
+  File getFileToUpdate();
 
   String writeConfig(String fileContent);
 
   void call() {
-    var mandatoryFiles = getMandatoryFilesToUpdate();
-    mandatoryFiles.forEach((file) => checkFileExists(file.path));
-
     <File>[]
-      ..addAll(mandatoryFiles)
-      ..addAll(getOptionalFilesToUpdate())
+      ..add(getFileToUpdate())
       ..forEach((file) {
-        file.writeAsStringSync(writeConfig(file.readAsStringSync()));
+        file.writeAsStringSync(
+          writeConfig(
+            file.readAsStringSync(),
+          ),
+        );
       });
   }
 }

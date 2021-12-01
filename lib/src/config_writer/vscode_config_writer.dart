@@ -24,12 +24,7 @@ class VscodeConfigWriter extends ConfigWriter {
         );
 
   @override
-  List<File> getMandatoryFilesToUpdate() => [
-        File(projectPath + "/.vscode/launch.json"),
-      ];
-
-  @override
-  List<File> getOptionalFilesToUpdate() => [];
+  File getFileToUpdate() => File(projectPath + "/.vscode/launch.json");
 
   @override
   String writeConfig(String fileContent) {
