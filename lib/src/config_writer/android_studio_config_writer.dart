@@ -92,23 +92,35 @@ class AndroidStudioConfigWriter extends ConfigWriter {
   }
 
   void updateConfigurationElements(List<XmlElement> configurationElements) {
-    final existingOptionsIndex = configurationElements.indexWhere(
+    final existingArgOptionsIndex = configurationElements.indexWhere(
       (element) => element.attributes.any(
         (it) => it.name == XmlName("name") && it.value == "additionalArgs",
       ),
     );
 
-    if (existingOptionsIndex != -1) {
+    if (existingArgOptionsIndex != -1) {
       // There's already an option element with additionalArgs attribute so we want to update it
-      final options = configurationElements[existingOptionsIndex];
-      final updatedOptions = updateElement(options);
-      configurationElements[existingOptionsIndex] = updatedOptions;
+      final options = configurationElements[existingArgOptionsIndex];
+      final updatedOptions = _updateArgElement(options);
+      configurationElements[existingArgOptionsIndex] = updatedOptions;
     } else {
       // We need to create new element for options with additionalArgs
-      final options = _createEmptyOptions();
+      final options = _createEmptyArgOptions();
 
-      final updatedOptions = updateElement(options);
+      final updatedOptions = _updateArgElement(options);
       configurationElements.add(updatedOptions);
+    }
+
+    final existingFilePathOptionsIndex = configurationElements.indexWhere(
+          (element) => element.attributes.any(
+            (it) => it.name == XmlName("name") && it.value == "filePath",
+      ),
+    );
+
+    if (existingFilePathOptionsIndex != -1 && startupFilePath != null) {
+      final options = configurationElements[existingFilePathOptionsIndex];
+      final updatedOptions = _updateFilePathElement(options);
+      configurationElements[existingFilePathOptionsIndex] = updatedOptions;
     }
   }
 
@@ -157,7 +169,7 @@ class AndroidStudioConfigWriter extends ConfigWriter {
       );
 
   /// Creates new Option [option] for new [additionalArgs]
-  XmlElement _createEmptyOptions() => XmlElement(
+  XmlElement _createEmptyArgOptions() => XmlElement(
         XmlName("option"),
       )
         ..setAttribute(
@@ -170,7 +182,7 @@ class AndroidStudioConfigWriter extends ConfigWriter {
         );
 
   /// Update the Configuration [option] with new dart-define while preserving old arguments.
-  XmlElement updateElement(XmlElement option) {
+  XmlElement _updateArgElement(XmlElement option) {
     var oldArguments = option.getAttribute('value')!;
     var retainedArgs = getRetainedArgs(oldArguments);
 
@@ -181,6 +193,16 @@ class AndroidStudioConfigWriter extends ConfigWriter {
       /// and because of that our dart-defines will not be parsed properly
       /// because of the extra spaces
       (retainedArgs + " " + dartDefineString).trim(),
+    );
+
+    return option.copy();
+  }
+
+  /// Update the Configuration [option] with new dart-define while preserving old arguments.
+  XmlElement _updateFilePathElement(XmlElement option) {
+    option.setAttribute(
+      'value',
+      ("\$PROJECT_DIR\$/lib/$startupFilePath").trim(),
     );
 
     return option.copy();

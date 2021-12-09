@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:define_env/src/config_remover/config_remover.dart';
-import 'package:define_env/src/model/platform.dart';
 import 'package:xml/xml.dart';
 
 class AndroidStudioConfigRemover extends ConfigRemover {
