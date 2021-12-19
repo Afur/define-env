@@ -31,6 +31,8 @@ class VscodeConfigWriter extends ConfigWriter {
     /// launch.json usually contains comments, which is valid only in JSON5.
     /// At this point however we cannot preserve these comments.
     fileContent = fileContent.replaceAll(RegExp('.+//.+\n'), "");
+    // removes trailing commas which can produce json decode exception 
+    fileContent = fileContent.replaceAll(RegExp('/\,(?=\s*?[\}\]])/g'), ""); 
 
     var configJson = jsonDecode(fileContent) as Map<String, dynamic>;
 

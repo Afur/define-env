@@ -19,6 +19,9 @@ class VscodeConfigReader extends ConfigReader {
     var fileContent = configFile.readAsStringSync();
     fileContent = fileContent.replaceAll(RegExp('.+//.+\n'), "");
 
+    // removes trailing commas which can produce json decode exception 
+    fileContent = fileContent.replaceAll(RegExp('/\,(?=\s*?[\}\]])/g'), ""); 
+
     var configJson = jsonDecode(fileContent) as Map<String, dynamic>;
 
     var configurations =
