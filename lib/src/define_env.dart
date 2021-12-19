@@ -11,6 +11,8 @@ void loadEnvFromFile(String file) {
 }
 
 String convertEnvMapToDartDefineString(Map<String, String> envMap) {
+  if (envMap.isEmpty) return "";
+
   StringBuffer buffer = StringBuffer();
   envMap.forEach((key, value) {
     if (value.isEmpty) return;
