@@ -54,6 +54,7 @@ class VscodeConfigWriter extends ConfigWriter {
         "name": configName,
         "request": "launch",
         "type": "dart",
+        "program": "lib/main.dart",
         "toolArgs": [],
       };
 

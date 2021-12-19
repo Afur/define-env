@@ -5,6 +5,7 @@ import 'package:dotenv/dotenv.dart' as dotEnv;
 
 void loadEnvFromFile(String file) {
   checkFileExists(file);
+  dotEnv.clean();
   dotEnv.load(file);
   Platform.environment.forEach((key, value) => dotEnv.env.remove(key));
 }
